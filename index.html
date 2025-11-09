@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Paper Validator</title>
+    <link rel="stylesheet" href="styles.css">
+
+
+    <!--Momo Trust Display-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Momo+Trust+Display&display=swap" rel="stylesheet">
+
+    <!--Playfair Display-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="title">Research Paper Validator</h1>
+            <p id="tag-line">Validate research papers using blockchain technology</p>
+        </header>
+        
+        <main>
+            <section class="upload-section">
+                <h2>Upload Research Paper</h2>
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <div class="upload-container">
+                            <div class="upload-area" id="dropZone">
+                                <i class="upload-icon"></i>
+                                <p>Drag and drop your PDF here or click to browse</p>
+                                <input type="file" id="paperFile" accept=".pdf" required>
+                            </div>
+                        </div>
+                        <div class="file-info" id="fileInfo" style="display: none;">
+                            <div class="file-details">
+                                <span class="file-name"></span>
+                                <span class="file-size"></span>
+                                <button type="button" class="remove-file" id="removeFile" title="Remove file">×</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="preview-container" id="pdfPreview" style="display: none;">
+                        <h3>PDF Preview</h3>
+                        <div class="pdf-controls">
+                            <button type="button" id="prevPage" class="btn-sm">Previous</button>
+                            <span id="pageInfo">Page <span id="currentPage">1</span> of <span id="pageCount">1</span></span>
+                            <button type="button" id="nextPage" class="btn-sm">Next</button>
+                        </div>
+                        <canvas id="pdfCanvas"></canvas>
+                    </div>
+                    <button type="submit" class="btn">Validate Paper</button>
+                </form>
+            </section>
+            
+            <section class="results-section" id="results" style="display: none;">
+                <h2>Validation Results</h2>
+                <div id="resultContent"></div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 Research Paper Validator. Powered by Blockchain.</p>
+            <div id="contributor">
+                <p> <span id="built-by">Built by</span> &MediumSpace;  Ayush-Bhavsar | Rajan-Panchal | Ayush-Yadav</p>
+            </div>
+        </footer>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
