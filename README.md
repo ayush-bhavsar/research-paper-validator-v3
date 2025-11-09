@@ -49,6 +49,31 @@ Open the printed URL (for example, `http://localhost:8080`) in a browser where M
 5. Approve the transaction in MetaMask when prompted. The transaction sends zero ETH with the document hash encoded in the data field.
 6. Wait for the confirmation banner showing the hash, status, and timestamp. You can inspect the transaction in a block explorer to verify the data.
 
+### Example Walkthrough
+To see what a successful run looks like, try the following sample scenario on the Sepolia testnet:
+
+1. Download any public-domain PDF (for instance, an open-access research paper) and upload it to the validator.
+2. After clicking **Validate Paper**, MetaMask will prompt you to confirm a transaction similar to:
+
+```
+To:          0xYourWalletAddress
+Value:       0 ETH
+Gas Limit:   21000
+Data:        0x2f2c2e5f... (hex-encoded SHA-256 hash)
+```
+
+3. Once the transaction is mined, the UI will display details such as:
+
+```
+Document Hash:  8f1342af4f3c6eb6a6c43d14c1c4a7e52ac8a7b9d7f94e0e4a9dfe1bf4d3c119
+Status:         Stored on Blockchain
+Timestamp:      11/09/2025, 16:32:10
+Tx Hash:        0x7c39af2d8f8f4b5d2a64db3a4ef9385b5dc1aabc2c1f8b0e8bb0f3d9e4a1f6c2
+Network:        Sepolia Testnet
+```
+
+4. Paste the transaction hash into [https://sepolia.etherscan.io/](https://sepolia.etherscan.io/) to verify that the same hash appears in the transaction `input data` field. Anyone with this hash and timestamp can confirm the document’s existence without accessing its contents.
+
 ## Configuration Notes
 - **Network selection:** Switch MetaMask to Sepolia (chain ID `0xaa36a7`) for testing to avoid real gas fees. The UI will work on any Ethereum-compatible network once MetaMask is connected.
 - **Gas limits:** The demo sets a basic gas limit of `21000`, sufficient for a simple value transfer. If you upgrade the logic to interact with a smart contract, adjust gas estimates accordingly.
