@@ -62,3 +62,8 @@ Research Paper Validator is a single-page web application built with Python (Fla
 - Multi-file batch validation
 - REST API for server-side verification
 - WalletConnect support for mobile wallets
+
+## images
+<img width="533" height="911" alt="image" src="https://github.com/user-attachments/assets/037b7f8a-2358-4306-9118-a4a382d3e80f" />
+<img width="1043" height="568" alt="image" src="https://github.com/user-attachments/assets/19b12082-db6e-4b57-8bbd-389ec5d016b0" />
+
