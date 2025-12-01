@@ -1,69 +1,71 @@
-# Research Paper Validator
+# Research Paper Validator v3 — Brief README
 
-Research Paper Validator is a single-page web application built with Python (Flask) that demonstrates how blockchain can be used to protect the integrity of academic work. Users upload a PDF, preview it in the browser, generate a SHA-256 hash, and push that hash to the Ethereum blockchain through MetaMask. The resulting transaction serves as tamper-evident proof that the document existed in its current form at a specific time.
+**What It Does**
+- Validates and anchors research paper integrity by hashing uploaded PDFs and creating a verifiable proof via MetaMask.
+- Renders PDF pages for quick visual review before validation.
+- Produces a result panel with document hash, timestamp, and cryptographic signature (off‑chain via MetaMask).
 
-## Features
-- PDF upload and preview powered by Mozilla PDF.js.
-- Client-side hashing with the Web Crypto API so the file never leaves the user's machine.
-- Blockchain anchoring via Web3.js and MetaMask; the demo sends a zero-value transaction that embeds the document hash.
-- Interactive UI with drag-and-drop uploads, pagination controls, and instant validation feedback.
+**How It Works (End‑to‑End)**
+- Upload PDF: User drags/drops or selects a file (max 10 MB).
+- Preview: PDF.js renders pages in a canvas with next/prev controls.
+- Hash: Browser computes SHA‑256 of the PDF using Web Crypto API.
+- Sign: MetaMask signs the hash (`personal_sign`), proving authorship without on‑chain fees.
+- Result: UI shows the hash, signature, recovered signer, and timestamp for sharing and later verification.
 
-## How It Works
-1. Upload a PDF (max 10 MB). The app renders a preview so you can confirm the correct file.
-2. Hash generation happens in the browser using SHA-256; only the hash is used after this point.
-3. Blockchain commit: MetaMask prompts you to sign a transaction that stores the hash. The default flow sends the transaction back to the same account purely for proof-of-existence.
-4. Verification: The UI displays the document hash, timestamp, and transaction hash you can share for auditing.
+**Backend (Flask)**
+- Serves a single route `/` from `app.py` rendering `templates/index.html`.
+- Static assets (`static/css`, `static/js`) delivered by Flask’s static handler.
+- No server‑side file processing; all validation runs client‑side for privacy.
 
-## Tech Stack
-- Python (Flask for backend serving)
-- HTML5, CSS3, Vanilla JavaScript
-- PDF.js for in-browser PDF rendering
-- Web3.js for Ethereum interaction
-- Web Crypto API for hashing
+**Frontend Design**
+- Structure: `templates/index.html` (single page), `static/js/script.js` (logic), `static/css/styles.css` (styling).
+- UI: Upload zone, PDF viewer, pagination controls, wallet connect button, validate button, and result panel.
+- Theme: Light background, solid button colors, responsive layout.
 
-## Prerequisites
-- Python 3.x installed
-- A modern desktop browser (Chrome, Edge, or Firefox recommended)
-- MetaMask browser extension with an unlocked wallet
-- Access to an Ethereum network (Sepolia testnet recommended for experimentation)
+**Components Count**
+- Pages: 1 (index).
+- Major UI components: 6
+	- Connect Wallet button + status
+	- Upload zone + file input
+	- PDF viewer (`canvas`) + controls
+	- Validate button
+	- Result panel (hash, signature, signer, timestamp)
+	- Notification/alerts via simple JS
 
-## Getting Started
-1. Clone or navigate to the project directory: `d:\Projects\research-paper-validator-v3`
-2. Install dependencies: `pip install -r requirements.txt`
-3. Run the Flask app: `python app.py`
-4. Open the printed URL (e.g., http://localhost:8080) in a browser where MetaMask is installed.
+**Complete Working (Flow)**
+- Connect MetaMask → Upload PDF → Preview pages → Click Validate → MetaMask signs PDF hash → Show signature + signer → Share/verify later.
 
-## Using the App
-1. Click "Connect MetaMask" and ensure the wallet is unlocked on the desired network (Sepolia or Mainnet).
-2. Drag and drop a PDF into the upload zone or click to browse.
-3. Review the preview pages using the next/previous controls.
-4. Press "Validate Paper".
-5. Approve the transaction in MetaMask when prompted. The transaction sends zero ETH with the document hash encoded in the data field.
-6. Wait for the confirmation banner showing the hash, status, and timestamp. You can inspect the transaction in a block explorer to verify the data.
+**Exceptions & Edge Cases**
+- No MetaMask: Shows detection error and prevents validation.
+- File too large: Blocks files >10 MB.
+- Invalid file type: Only `application/pdf` accepted.
+- Signature rejected/cancelled: Displays error; validation halts.
+- Rendering errors: Fallback alerts if PDF.js cannot parse the document.
 
-## Example Walkthrough
-- Download any public-domain PDF (e.g., an open-access research paper) and upload it to the validator.
-- After clicking "Validate Paper", MetaMask will prompt for a transaction (To: your address, Value: 0 ETH, Data: hex-encoded hash).
-- Once mined, the UI displays details like Document Hash, Status, Timestamp, Tx Hash, and Network.
-- Paste the Tx Hash into https://sepolia.etherscan.io/ to verify the hash in the input data.
+**Technologies Used**
+- Backend: Python 3, Flask.
+- Frontend: HTML5, CSS3, Vanilla JS.
+- Libraries: PDF.js (rendering), Web3.js (wallet/provider), Web Crypto API (hashing).
+- Wallet: MetaMask (`personal_sign` off‑chain signature).
 
-## Configuration Notes
-- Network selection: Switch MetaMask to Sepolia (chain ID 0xaa36a7) for testing to avoid real gas fees.
-- Gas limits: Set to 21000 for a simple transfer; adjust for smart contract interactions.
-- Smart contract integration: Modify `static/js/script.js` to interact with a deployed contract using its ABI and address.
+**Factors Affecting Behavior**
+- Browser support: PDF.js and Web Crypto availability in modern browsers.
+- MetaMask state: Installation, unlock status, and selected network.
+- File size/quality: Large or corrupted PDFs may fail to render.
+- Network policies: Some RPCs disallow EOA→EOA data transfers; signature flow avoids this.
+- User permissions: Wallet connection and signing must be approved.
 
-## Privacy & Security
-- The PDF never leaves the browser; only its SHA-256 hash is used.
-- Sharing the transaction hash allows others to verify the timestamp and hash without exposing document contents.
-- Always test on a testnet before mainnet to avoid costs.
+**Quick Start**
+- Install deps: `pip install -r requirements.txt`
+- Run backend: `python app.py`
+- Open: `http://localhost:8080` in a browser with MetaMask.
 
-## Roadmap Ideas
-- Dedicated smart contract for storing hashes and metadata
-- Multi-file batch validation
-- REST API for server-side verification
-- WalletConnect support for mobile wallets
+**Verify a Signature (Concept)**
+- Keep the `hash` and `signature` values.
+- Use `ecRecover` (Web3/ethers or backend script) to recover the signer and compare with the displayed address.
 
-## images
-<img width="533" height="911" alt="image" src="https://github.com/user-attachments/assets/037b7f8a-2358-4306-9118-a4a382d3e80f" />
-<img width="1043" height="568" alt="image" src="https://github.com/user-attachments/assets/19b12082-db6e-4b57-8bbd-389ec5d016b0" />
+**Future Enhancements**
+- On‑chain anchoring via a minimal proof‑of‑existence smart contract.
+- Style‑profile validations (APA/IEEE sections and references).
+- PDF/DOCX text extraction and semantic checks.
 
