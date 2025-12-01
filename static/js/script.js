@@ -7,15 +7,16 @@ document.getElementById('connectWallet').addEventListener('click', async () => {
     if (typeof window.ethereum !== 'undefined') {
         web3 = new Web3(window.ethereum);
         try {
-            await window.ethereum.request({ method: 'eth_requestAccounts' });
-            const accounts = await web3.eth.getAccounts();
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             account = accounts[0];
             document.getElementById('walletStatus').textContent = `Connected: ${account}`;
+            console.log('Connected to MetaMask:', account);
         } catch (error) {
-            alert('MetaMask connection failed');
+            console.error('MetaMask connection error:', error);
+            alert('MetaMask connection failed: ' + error.message);
         }
     } else {
-        alert('MetaMask not detected');
+        alert('MetaMask not detected. Please install MetaMask extension.');
     }
 });
 
@@ -86,7 +87,7 @@ document.getElementById('nextPage').addEventListener('click', () => {
 document.getElementById('validateBtn').addEventListener('click', async () => {
     if (!pdfDoc || !account) return;
     const hash = await generateHash();
-    await storeHashOnBlockchain(hash);
+    await signHashWithMetaMask(hash);
 });
 
 async function generateHash() {
@@ -96,22 +97,25 @@ async function generateHash() {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-async function storeHashOnBlockchain(hash) {
+async function signHashWithMetaMask(hash) {
     try {
-        const tx = await web3.eth.sendTransaction({
-            from: account,
-            to: account,  // Self-transfer for proof-of-existence
-            value: '0x0',
-            data: '0x' + hash,
-            gas: 21000
+        // Ask MetaMask to sign the message (hash) with the connected account
+        const signature = await window.ethereum.request({
+            method: 'personal_sign',
+            params: [ '0x' + hash, account ],
         });
+
+        // Optional: recover the signer to show verification info
+        const recovered = await web3.eth.personal.ecRecover('0x' + hash, signature);
+
         document.getElementById('docHash').textContent = hash;
-        document.getElementById('status').textContent = 'Stored on Blockchain';
+        document.getElementById('status').textContent = 'Signed with MetaMask';
         document.getElementById('timestamp').textContent = new Date().toLocaleString();
-        document.getElementById('txHash').textContent = tx.transactionHash;
-        document.getElementById('network').textContent = await web3.eth.net.getNetworkType();
+        document.getElementById('signature').textContent = signature;
+        document.getElementById('signer').textContent = recovered || account;
         document.getElementById('result').style.display = 'block';
     } catch (error) {
-        alert('Transaction failed: ' + error.message);
+        alert('Signature failed: ' + (error && error.message ? error.message : error));
+        console.error('Signature error:', error);
     }
 }
