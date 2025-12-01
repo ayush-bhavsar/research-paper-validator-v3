@@ -238,6 +238,35 @@ button:disabled {
     font-family: 'Courier New', monospace;
 }
 
+.footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid #e0e0e0;
+    text-align: center;
+}
+
+.contributors {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+.contributors strong {
+    color: #333;
+    font-weight: 600;
+}
+
+.contributors a {
+    color: #4a90e2;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contributors a:hover {
+    color: #2e7d32;
+    text-decoration: underline;
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 25px;
