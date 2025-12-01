@@ -24,12 +24,92 @@
 - **Security:** No document upload to server; only hash/signature displayed to the user.
 
 ## 5. Detailed Workflow
-1. User opens the app and clicks “Connect MetaMask”.
+1. User opens the app and clicks "Connect MetaMask".
 2. MetaMask prompts for account access; on approval, the address is shown.
 3. User uploads a PDF; the app renders it with PDF.js for review.
-4. On “Validate Paper”, the app computes SHA‑256 of the PDF and calls `personal_sign` via MetaMask.
+4. On "Validate Paper", the app computes SHA‑256 of the PDF and calls `personal_sign` via MetaMask.
 5. Signature and signer are displayed along with the hash and timestamp.
 6. User can share hash + signature for independent verification later.
+
+## 5a. How the Project Works (Step-by-Step)
+
+### Initial Setup Phase
+- Flask server starts on `localhost:8080` and loads the single-page application.
+- Browser loads `index.html` with embedded CSS and JavaScript.
+- Web3.js library initializes to detect MetaMask presence via `window.ethereum`.
+
+### Wallet Connection Phase
+- User clicks "Connect MetaMask" button.
+- JavaScript checks if `window.ethereum` exists (MetaMask installed).
+- Calls `eth_requestAccounts` method to request wallet access.
+- MetaMask popup appears asking user to approve connection.
+- On approval, the connected Ethereum address is retrieved and displayed in the status area.
+- If MetaMask is not detected, an alert notifies the user to install it.
+
+### File Upload Phase
+- User either clicks the upload zone or drags a PDF file onto it.
+- JavaScript validates the file type (must be `application/pdf`) and size (max 10 MB).
+- If valid, FileReader API reads the file as an ArrayBuffer.
+- The raw binary data is passed to PDF.js library for rendering.
+
+### PDF Preview Phase
+- PDF.js parses the document and extracts total page count.
+- First page is rendered on an HTML5 canvas element at 1.5x scale.
+- Page navigation controls (Previous/Next buttons) become active.
+- Page indicator shows "Page X of Y" dynamically.
+- User can review the document visually before validation.
+
+### Hash Generation Phase
+- When user clicks "Validate Paper", JavaScript retrieves the complete PDF binary data.
+- Web Crypto API's `crypto.subtle.digest('SHA-256', pdfBytes)` computes the hash.
+- Result is a 256-bit (32-byte) hash converted to hexadecimal string.
+- This hash uniquely represents the document content.
+
+### Signature Phase
+- The hex hash is prefixed with `0x` and passed to MetaMask's `personal_sign` method.
+- MetaMask displays the signing prompt with the hash message.
+- User reviews and approves the signature request.
+- MetaMask generates a cryptographic signature using the user's private key.
+- The signature (65 bytes: r, s, v components) is returned to the app.
+
+### Verification & Display Phase
+- JavaScript uses Web3's `ecRecover` to extract the signer address from the signature.
+- This confirms the signature was created by the connected wallet.
+- Result panel displays:
+  - **Document Hash:** SHA-256 hex value
+  - **Status:** "Signed with MetaMask"
+  - **Timestamp:** Current date/time when signed
+  - **Signature:** Full cryptographic signature (130 hex characters)
+  - **Signer:** Recovered Ethereum address
+- User can copy these values for sharing or later verification.
+
+### Error Handling
+- **MetaMask not installed:** Alert message with installation instructions.
+- **Connection denied:** User-friendly error indicating wallet access was rejected.
+- **Invalid file:** Alerts for wrong file type or oversized PDFs.
+- **Signature cancelled:** Clear message if user declines signing.
+- **PDF rendering errors:** Fallback alerts for corrupted or unsupported PDFs.
+
+### Data Flow Summary
+```
+User Upload → FileReader → ArrayBuffer → PDF.js Render → Canvas Display
+                                       ↓
+                                  Web Crypto API
+                                       ↓
+                                  SHA-256 Hash
+                                       ↓
+                              MetaMask personal_sign
+                                       ↓
+                           Signature + ecRecover
+                                       ↓
+                              Display Results Panel
+```
+
+### Privacy & Security Design
+- **No server upload:** PDF stays entirely in browser memory; Flask never sees the document.
+- **Client-side hashing:** Ensures document content privacy while proving integrity.
+- **Off-chain signature:** No gas fees, no blockchain transaction costs, instant results.
+- **Verifiable proof:** Anyone with hash + signature can verify authenticity without accessing the original document.
 
 ## 6. Backend Design (Flask)
 - **Routes:**
