@@ -1,4 +1,4 @@
-# Research Paper Validator v3 — Viva Summary
+# Research Paper Validator v3 
 
 ## 1. Project Overview
 - **Purpose:** Validate research papers and prove integrity using cryptographic hashing and wallet-based signing.
