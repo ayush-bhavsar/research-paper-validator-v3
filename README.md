@@ -64,13 +64,8 @@
 - Keep the `hash` and `signature` values.
 - Use `ecRecover` (Web3/ethers or backend script) to recover the signer and compare with the displayed address.
 
-<<<<<<< HEAD
-**Future Enhancements**
-- On‑chain anchoring via a minimal proof‑of‑existence smart contract.
-- Style‑profile validations (APA/IEEE sections and references).
-- PDF/DOCX text extraction and semantic checks.
 =======
 ## Demo-Video
 link to view the live demo -> link[https://youtu.be/fkwgC1TJ9Do]
->>>>>>> 4374b431a670bc3937792dd19e627a8f63ba773c
+
 
