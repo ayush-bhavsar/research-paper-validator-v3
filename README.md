@@ -1,4 +1,4 @@
-# Research Paper Validator v3 — Brief README
+# Research Paper Validator v3
 
 **What It Does**
 - Validates and anchors research paper integrity by hashing uploaded PDFs and creating a verifiable proof via MetaMask.
