@@ -50,6 +50,37 @@ h1 {
     line-height: 1.6;
 }
 
+.how-it-works {
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 15px;
+    margin: 25px 0;
+    border-left: 4px solid #add8e6;
+}
+
+.how-it-works h2 {
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.how-it-works ol {
+    padding-left: 20px;
+    line-height: 1.8;
+}
+
+.how-it-works li {
+    margin: 10px 0;
+    color: #555;
+    font-size: 15px;
+}
+
+.how-it-works li strong {
+    color: #333;
+    font-weight: 600;
+}
+
 #connectWallet {
     display: block;
     margin: 20px auto;
