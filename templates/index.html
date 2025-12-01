@@ -11,7 +11,20 @@
 <body>
     <div class="container">
         <h1>Research Paper Validator</h1>
-        <p>Demonstrate blockchain integrity for academic work. Upload a PDF, preview it, generate a hash, and anchor it on Ethereum via MetaMask.</p>
+        <p>Demonstrate blockchain integrity for academic work. Upload a PDF, preview it, generate a hash, and sign it via MetaMask.</p>
+        
+        <div class="how-it-works">
+            <h2>How It Works</h2>
+    
+            <ol>
+                <li><strong>Connect Wallet:</strong> Click "Connect MetaMask" to link your Ethereum wallet</li>
+                <li><strong>Upload PDF:</strong> Drag & drop or select your research paper (max 10 MB)</li>
+                <li><strong>Preview:</strong> Review your document with page navigation controls</li>
+                <li><strong>Generate Hash:</strong> Click "Validate Paper" to create a SHA-256 cryptographic hash</li>
+                <li><strong>Sign:</strong> Approve the signature request in MetaMask (no gas fees)</li>
+                <li><strong>Verify:</strong> Receive signature proof with hash, timestamp, and signer address</li>
+            </ol>
+        </div>
         
         <button id="connectWallet">Connect MetaMask</button>
         <div id="walletStatus">Wallet not connected</div>
